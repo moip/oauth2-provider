@@ -7,6 +7,14 @@ describe Songkick::OAuth2::Model::Client do
     Songkick::OAuth2::Model::Authorization.for(@owner, @client)
   end
 
+  it "generates a client with my own id" do
+    Songkick::OAuth2.client_id_generator do
+      "APP-" + SecureRandom.hex(Songkick::OAuth2::TOKEN_SIZE / 8).to_i(16).to_s(36).slice(0,12).upcase
+    end
+    @client = Songkick::OAuth2::Model::Client.create(:name => 'App1', :redirect_uri => 'http://example.com/cb')
+    @client.client_id.should match "APP" 
+  end
+
   it "is valid" do
     @client.should be_valid
   end
