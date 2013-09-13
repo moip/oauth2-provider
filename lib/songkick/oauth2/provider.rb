@@ -29,13 +29,15 @@ module Songkick
     end
 
     def self.generate_id(&predicate)
-      puts "==================== #{@client_id_generator}"
-      return @client_id_generator if @client_id_generator
+      return @client_id_generator.call if @client_id_generator
       id = random_string
       id = random_string until predicate.call(id)
       id
     end
 
+      def self.client_id_generator(&block)
+        @client_id_generator = block
+      end
     def self.hashify(token)
       return nil unless String === token
       Digest::SHA1.hexdigest(token)
@@ -133,7 +135,7 @@ module Songkick
       end
 
       def self.client_id_generator(&block)
-        @client_id_generator = block.call if block_given?
+        @client_id_generator = block
       end
     end
 
