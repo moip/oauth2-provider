@@ -29,6 +29,8 @@ module Songkick
     end
 
     def self.generate_id(&predicate)
+      puts "==================== #{@client_id_generator}"
+      return @client_id_generator if @client_id_generator
       id = random_string
       id = random_string until predicate.call(id)
       id
@@ -128,6 +130,10 @@ module Songkick
 
       def self.access_token_from_request(*args)
         Router.access_token_from_request(*args)
+      end
+
+      def self.client_id_generator(&block)
+        @client_id_generator = block.call if block_given?
       end
     end
 
