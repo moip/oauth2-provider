@@ -29,15 +29,16 @@ module Songkick
     end
 
     def self.generate_id(&predicate)
-      return @client_id_generator.call if @client_id_generator
       id = random_string
       id = random_string until predicate.call(id)
       id
     end
 
-      def self.client_id_generator(&block)
-        @client_id_generator = block
-      end
+    def self.client_id_generator(&block)
+      @client_id_generator = block if block_given?
+      @client_id_generator
+    end
+
     def self.hashify(token)
       return nil unless String === token
       Digest::SHA1.hexdigest(token)
@@ -132,10 +133,6 @@ module Songkick
 
       def self.access_token_from_request(*args)
         Router.access_token_from_request(*args)
-      end
-
-      def self.client_id_generator(&block)
-        @client_id_generator = block
       end
     end
 

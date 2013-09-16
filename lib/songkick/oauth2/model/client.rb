@@ -20,6 +20,8 @@ module Songkick
         before_create :generate_credentials
 
         def self.create_client_id
+          return Songkick::OAuth2.client_id_generator.call if Songkick::OAuth2.client_id_generator
+
           Songkick::OAuth2.generate_id do |client_id|
             Helpers.count(self, :client_id => client_id).zero?
           end
