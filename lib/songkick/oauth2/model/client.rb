@@ -15,7 +15,7 @@ module Songkick
         validates_presence_of   :name, :redirect_uri
         validate :check_format_of_redirect_uri
 
-        attr_accessible :name, :redirect_uri
+        attr_accessible :name, :redirect_uri, :client_id
 
         before_create :generate_credentials
 
@@ -50,7 +50,7 @@ module Songkick
         end
 
         def generate_credentials
-          self.client_id = self.class.create_client_id
+          self.client_id = self.class.create_client_id unless self.client_id
           self.client_secret = Songkick::OAuth2.random_string
         end
       end
