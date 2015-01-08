@@ -50,7 +50,9 @@ module Songkick
         end
 
         def generate_credentials
-          self.client_id = self.class.create_client_id unless self.client_id
+          puts "Client id is #{self.client_id}"
+          puts self.client_id
+          #self.client_id = self.class.create_client_id unless self.client_id
           self.client_secret = Songkick::OAuth2.random_string
         end
       end
